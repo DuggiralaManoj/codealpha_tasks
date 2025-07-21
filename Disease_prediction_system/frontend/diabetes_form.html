@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Form</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="main.js" defer></script>
+</head>
+<body class="bg-gradient">
+
+<div class="form-card">
+    <h1>🩸 Diabetes Risk Analyzer</h1>
+    <p>Please enter patient details below.</p>
+
+    <form id="diseaseForm" data-disease="diabetes">
+        <label>Pregnancies:</label>
+        <input type="number" name="feature" placeholder="0" required>
+
+        <label>Glucose Level (mg/dL):</label>
+        <input type="number" name="feature" placeholder="120" required>
+
+        <label>Blood Pressure (mm Hg):</label>
+        <input type="number" name="feature" placeholder="80" required>
+
+        <label>Skin Thickness (mm):</label>
+        <input type="number" name="feature" placeholder="20" required>
+
+        <label>Insulin (mu U/ml):</label>
+        <input type="number" name="feature" placeholder="85" required>
+
+        <label>BMI:</label>
+        <input type="number" name="feature" step="0.1" placeholder="26.5" required>
+
+        <label>Diabetes Pedigree Function:</label>
+        <input type="number" name="feature" step="0.01" placeholder="0.4" required>
+
+        <label>Age (years):</label>
+        <input type="number" name="feature" placeholder="45" required>
+
+        <button type="submit" class="predict-button">🔍 Predict</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Medical Report</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="result.js" defer></script>
+</head>
+<body class="bg-gradient">
+
+<div class="report-container">
+    <div class="report-header">
+        <h1>📋 Medical Prediction Report</h1>
+        <div id="predictionResult" class="prediction-result"></div>
+    </div>
+
+    <div class="report-content">
+        <div class="section">
+            <h2>Patient Information</h2>
+            <div id="patientInfo" class="info-grid"></div>
+        </div>
+
+        <div class="section">
+            <h2>Input Parameters</h2>
+            <div id="inputParameters" class="parameters-grid"></div>
+        </div>
+
+        <div class="section">
+            <h2>Risk Assessment</h2>
+            <div id="riskAssessment" class="risk-assessment"></div>
+        </div>
+
+        <div class="section">
+            <h2>Recommendations</h2>
+            <div id="recommendations" class="recommendations"></div>
+        </div>
+    </div>
+
+    <div class="report-footer">
+        <button onclick="window.print()" class="print-button">🖨 Print Report</button>
+        <a href="index.html" class="back-button">🔙 Back to Home</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Risk Form</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="main.js" defer></script>
+</head>
+<body class="bg-gradient">
+
+<div class="form-card">
+    <h1>🎗️ Breast Cancer Risk Analyzer</h1>
+    <p>Please enter tumor features below.</p>
+
+    <form id="diseaseForm" data-disease="breast_cancer">
+        <h3>Mean Features</h3>
+        <label>Mean Radius:</label>
+        <input type="number" name="feature" step="0.01" placeholder="14.5" required>
+
+        <label>Mean Texture:</label>
+        <input type="number" name="feature" step="0.01" placeholder="20.5" required>
+
+        <label>Mean Perimeter:</label>
+        <input type="number" name="feature" step="0.01" placeholder="90.2" required>
+
+        <label>Mean Area:</label>
+        <input type="number" name="feature" step="0.01" placeholder="600.3" required>
+
+        <label>Mean Smoothness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.10" required>
+
+        <label>Mean Compactness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.12" required>
+
+        <label>Mean Concavity:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.09" required>
+
+        <label>Mean Concave Points:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.05" required>
+
+        <label>Mean Symmetry:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.18" required>
+
+        <label>Mean Fractal Dimension:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.06" required>
+
+        <h3>Standard Error Features</h3>
+        <label>SE Radius:</label>
+        <input type="number" name="feature" step="0.01" placeholder="0.4" required>
+
+        <label>SE Texture:</label>
+        <input type="number" name="feature" step="0.01" placeholder="1.2" required>
+
+        <label>SE Perimeter:</label>
+        <input type="number" name="feature" step="0.01" placeholder="3.0" required>
+
+        <label>SE Area:</label>
+        <input type="number" name="feature" step="0.01" placeholder="40.0" required>
+
+        <label>SE Smoothness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.007" required>
+
+        <label>SE Compactness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.025" required>
+
+        <label>SE Concavity:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.032" required>
+
+        <label>SE Concave Points:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.012" required>
+
+        <label>SE Symmetry:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.02" required>
+
+        <label>SE Fractal Dimension:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.004" required>
+
+        <h3>Worst Features</h3>
+        <label>Worst Radius:</label>
+        <input type="number" name="feature" step="0.01" placeholder="17.0" required>
+
+        <label>Worst Texture:</label>
+        <input type="number" name="feature" step="0.01" placeholder="28.0" required>
+
+        <label>Worst Perimeter:</label>
+        <input type="number" name="feature" step="0.01" placeholder="110.0" required>
+
+        <label>Worst Area:</label>
+        <input type="number" name="feature" step="0.01" placeholder="900.0" required>
+
+        <label>Worst Smoothness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.14" required>
+
+        <label>Worst Compactness:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.35" required>
+
+        <label>Worst Concavity:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.27" required>
+
+        <label>Worst Concave Points:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.15" required>
+
+        <label>Worst Symmetry:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.30" required>
+
+        <label>Worst Fractal Dimension:</label>
+        <input type="number" name="feature" step="0.0001" placeholder="0.08" required>
+
+        <button type="submit" class="predict-button">🔍 Predict</button>
+    </form>
+</div>
+
+</body>
+</html>

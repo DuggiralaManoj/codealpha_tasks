@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Risk Form</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="main.js" defer></script>
+</head>
+<body class="bg-gradient">
+
+<div class="form-card">
+    <h1>❤️ Heart Disease Risk Analyzer</h1>
+    <p>Please input patient details below to assess heart disease risk.</p>
+
+    <form id="diseaseForm" data-disease="heart_disease">
+        <label>Age (years):</label>
+        <input type="number" name="feature" placeholder="50" required>
+
+        <label>Sex (0 = female, 1 = male):</label>
+        <input type="number" name="feature" min="0" max="1" placeholder="1" required>
+
+        <label>Chest Pain Type (0–3):</label>
+        <input type="number" name="feature" min="0" max="3" placeholder="0" required>
+
+        <label>Resting Blood Pressure (mm Hg):</label>
+        <input type="number" name="feature" placeholder="120" required>
+
+        <label>Cholesterol Level (mg/dl):</label>
+        <input type="number" name="feature" placeholder="200" required>
+
+        <label>Fasting Blood Sugar >120 mg/dl (1 = true, 0 = false):</label>
+        <input type="number" name="feature" min="0" max="1" placeholder="0" required>
+
+        <label>Resting ECG (0–2):</label>
+        <input type="number" name="feature" min="0" max="2" placeholder="1" required>
+
+        <label>Max Heart Rate Achieved:</label>
+        <input type="number" name="feature" placeholder="150" required>
+
+        <label>Exercise Induced Angina (1 = yes, 0 = no):</label>
+        <input type="number" name="feature" min="0" max="1" placeholder="0" required>
+
+        <label>ST Depression Induced by Exercise:</label>
+        <input type="number" name="feature" step="0.1" placeholder="1.0" required>
+
+        <label>Peak Exercise ST Segment (1 = upsloping, 2 = flat, 3 = downsloping):</label>
+        <input type="number" name="feature" min="1" max="3" placeholder="2" required>
+
+        <label>Number of Major Vessels (0-3):</label>
+        <input type="number" name="feature" min="0" max="3" placeholder="0" required>
+
+        <label>Thalassemia (1 = normal, 2 = fixed defect, 3 = reversible defect):</label>
+        <input type="number" name="feature" min="1" max="3" placeholder="2" required>
+
+        <button type="submit" class="predict-button">🔍 Predict</button>
+    </form>
+</div>
+
+</body>
+</html>
