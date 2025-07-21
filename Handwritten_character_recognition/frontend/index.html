@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Handwritten Character Recognition</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .canvas-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    canvas {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background: black;
+      cursor: crosshair;
+    }
+
+    .controls {
+      margin-top: 15px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .upload-box {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .results {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .prediction {
+      font-size: 2em;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .confidence {
+      color: #28a745;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border: 1px solid #f5c6cb;
+    }
+
+    .loading {
+      text-align: center;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .instructions {
+      background: #d1ecf1;
+      color: #0c5460;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #bee5eb;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1> Handwritten Character Recognition</h1>
+
+  <div class="instructions">
+    <strong>Instructions:</strong> Draw a single character (letter or number) clearly in the black canvas below. The model works best with characters that are centered and take up most of the canvas space.
+  </div>
+
+  <div class="canvas-box">
+    <h3>✏ Draw a Character</h3>
+    <canvas id="canvas" width="280" height="280"></canvas>
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="clearCanvas()">Clear</button>
+      <button class="btn btn-primary" onclick="predictDrawing()">Predict</button>
+    </div>
+  </div>
+
+  <div class="upload-box">
+    <input type="file" id="fileInput" accept="image/*" />
+    <button class="btn btn-primary" onclick="predictUpload()">Predict Uploaded Image</button>
+  </div>
+
+  <div id="loadingBox" class="loading" style="display: none;">
+     Processing your drawing...
+  </div>
+
+  <div class="results" id="resultsBox">
+    <div class="prediction" id="mainPrediction"></div>
+    <p class="confidence" id="confidence"></p>
+    <h4>All Predictions:</h4>
+    <ul id="topPredictions"></ul>
+  </div>
+
+  <div id="errorBox" class="error" style="display: none;">
+    <div id="errorMessage"></div>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  // Set up canvas drawing properties
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 8;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Mouse events
+  canvas.addEventListener('mousedown', (e) => {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (drawing) {
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    drawing = false;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    drawing = false;
+  });
+
+  // Touch events for mobile
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousedown', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousemove', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+
+  canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    const mouseEvent = new MouseEvent('mouseup', {});
+    canvas.dispatchEvent(mouseEvent);
+  });
+
+  function clearCanvas() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    hideResults();
+  }
+
+  function hideResults() {
+    document.getElementById("resultsBox").style.display = 'none';
+    document.getElementById("errorBox").style.display = 'none';
+    document.getElementById("loadingBox").style.display = 'none';
+  }
+
+  function showError(message) {
+    document.getElementById("errorMessage").textContent = message;
+    document.getElementById("errorBox").style.display = 'block';
+    document.getElementById("loadingBox").style.display = 'none';
+  }
+
+  function showLoading() {
+    document.getElementById("loadingBox").style.display = 'block';
+    hideResults();
+  }
+
+  // Initialize canvas
+  clearCanvas();
+
+  function predictDrawing() {
+    // Check if canvas is empty
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    let isEmpty = true;
+
+    // Check if any pixel is not black (has been drawn on)
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] > 0 || data[i + 1] > 0 || data[i + 2] > 0) {
+        isEmpty = false;
+        break;
+      }
+    }
+
+    if (isEmpty) {
+      showError("Please draw something on the canvas first!");
+      return;
+    }
+
+    showLoading();
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        showError("Failed to capture canvas image");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', blob, 'drawing.png');
+      sendPrediction(formData);
+    }, 'image/png');
+  }
+
+  function predictUpload() {
+    const file = document.getElementById('fileInput').files[0];
+    if (!file) {
+      showError('Please select a file first');
+      return;
+    }
+
+    showLoading();
+    const formData = new FormData();
+    formData.append('file', file);
+    sendPrediction(formData);
+  }
+
+  function sendPrediction(formData) {
+    fetch('/predict/character', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById("loadingBox").style.display = 'none';
+
+        console.log('API Response:', data); // Debug logging
+
+        if (!data.success) {
+          showError(data.error || data.message || "Prediction failed");
+          return;
+        }
+
+        if (!data.prediction) {
+          showError("No prediction returned from server");
+          return;
+        }
+
+        // Display results
+        const result = data.prediction;
+        document.getElementById('mainPrediction').textContent = `Prediction: ${result.prediction || result.char || 'Unknown'}`;
+
+        const confidence = result.confidence || data.confidence || 0;
+        document.getElementById('confidence').textContent = `Confidence: ${(confidence * 100).toFixed(2)}%`;
+
+        const list = document.getElementById('topPredictions');
+        list.innerHTML = '';
+
+        const predictions = result.all_predictions || data.top_predictions || [];
+        predictions.forEach(p => {
+          const li = document.createElement('li');
+          li.textContent = `${p.char || p.prediction}: ${(p.confidence * 100).toFixed(1)}%`;
+          list.appendChild(li);
+        });
+
+        document.getElementById('resultsBox').style.display = 'block';
+      })
+      .catch(err => {
+        console.error('Prediction error:', err);
+        showError(`Network error: ${err.message}`);
+      });
+  }
+</script>
+</body>
+</html>
